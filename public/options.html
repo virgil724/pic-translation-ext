@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>畫面翻譯設定</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      background: #f5f5f5;
+      color: #333;
+    }
+    h1 {
+      font-size: 18px;
+      margin: 0 0 16px;
+      color: #1a73e8;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a73e8;
+      margin: 20px 0 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .form-group { margin-bottom: 12px; }
+    .row { display: flex; gap: 12px; }
+    .row .form-group { flex: 1; }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #555;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+      background: #fff;
+    }
+    input[type="color"] { height: 36px; padding: 2px; }
+    input:focus { outline: none; border-color: #1a73e8; }
+    .help { font-size: 11px; color: #777; margin-top: 4px; }
+    .btn {
+      padding: 10px 24px;
+      background: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+    .btn:hover { background: #1557b0; }
+    .status {
+      margin-top: 12px;
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      display: none;
+    }
+    .status.success { display: block; background: #e6f4ea; color: #1e8e3e; }
+    .status.error { display: block; background: #fce8e6; color: #d93025; }
+    .preview {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    kbd {
+      padding: 1px 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      background: #fff;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <h1>畫面翻譯設定</h1>
+
+  <form id="form">
+    <div class="section-title">Gemini</div>
+
+    <div class="form-group">
+      <label for="provider">API 服務</label>
+      <select id="provider">
+        <option value="gemini-api">Gemini API（AI Studio 的 key）</option>
+        <option value="agent-platform">Agent Platform／Vertex AI 的 key</option>
+      </select>
+      <div class="help">依 key 是在哪裡建立的來選，兩種 key 不能互用。選錯會出現 403 錯誤。</div>
+    </div>
+
+    <div class="form-group">
+      <label for="apiKey">API key</label>
+      <input type="password" id="apiKey" autocomplete="off" spellcheck="false">
+      <div class="help">只存在這台電腦的 chrome.storage.local，只有背景程式會讀取，不會傳給網頁。</div>
+    </div>
+
+    <div class="form-group">
+      <label for="model">模型名稱</label>
+      <input type="text" id="model" spellcheck="false">
+      <div class="help">Gemini API 的模型 ID，需要支援圖片輸入與結構化輸出。</div>
+    </div>
+
+    <div class="section-title">譯文樣式</div>
+
+    <div class="row">
+      <div class="form-group">
+        <label for="background">底色</label>
+        <input type="color" id="background">
+      </div>
+      <div class="form-group">
+        <label for="color">文字顏色</label>
+        <input type="color" id="color">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="fontFamily">字型</label>
+      <input type="text" id="fontFamily" spellcheck="false">
+      <div class="help">CSS font-family 的寫法，用逗號分隔多個字型。</div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label for="minFontSize">最小字級（px）</label>
+        <input type="number" id="minFontSize" min="6" max="48" step="1">
+        <div class="help">縮到這個字級還放不下時，文字會溢出框外。</div>
+      </div>
+      <div class="form-group">
+        <label for="maxFontSize">最大字級（px）</label>
+        <input type="number" id="maxFontSize" min="6" max="96" step="1">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>預覽</label>
+      <span class="preview" id="preview">這是譯文的樣子</span>
+    </div>
+
+    <button class="btn" type="submit">儲存</button>
+    <div class="status" id="status"></div>
+  </form>
+
+  <div class="section-title">快捷鍵</div>
+  <p class="help">
+    預設：<kbd>Alt</kbd>+<kbd>Q</kbd> 翻譯目前畫面、<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>H</kbd> 顯示／隱藏譯文、<kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> 清除譯文。
+    可在 chrome://extensions/shortcuts 修改。
+  </p>
+
+  <script src="options.js"></script>
+</body>
+</html>

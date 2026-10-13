@@ -1,0 +1,33 @@
+# 相依套件與建置輸出
+node_modules/
+dist/
+
+# 本機的 Claude Code 設定
+/.claude/
+/.flash/
+
+# 舊版 v2 擴充功能（保留在本機當參考，不納入版控）
+# 一律用 / 錨定在根目錄，否則會誤殺 public/ 底下的同名檔案
+/background.js
+/content.js
+/manifest.json
+/popup.html
+/popup.js
+/styles.css
+/icons/
+/temp_input_res.json
+
+# OCR 後端實驗（保留在本機，不納入版控）
+/dots-ocr/
+/runpod-glmocr-worker/
+/runpod-paddleocr-vl-worker/
+/paddleocrvl-pipeline-worker/
+/runpod-flash-test/
+
+# 開發過程的雜項
+/*.resolved
+/logs*.txt
+/example.json
+/API_DESIGN.md
+/*.png
+/*.jpg
